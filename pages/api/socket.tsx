@@ -15,6 +15,13 @@ const SocketHandler = (req : NextApiRequest, res : NextApiResponseServerIO) => {
         addTrailingSlash: false
     })
     res.socket.server.io = io
+    io.on('connection', (socket) => {
+        // socket.emit('message', 'world!')
+        socket.on('message', function (msg : string) {
+            console.log("received msg: " + msg)
+            io.emit('message', msg)
+        }) 
+    })
   }
   res.end()
 }
