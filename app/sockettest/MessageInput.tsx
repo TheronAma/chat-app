@@ -2,8 +2,8 @@ import { useRef } from 'react'
 const MessageInput = ( {msg, setMsg, sendMessage} : {msg : string, setMsg : (msg: string) => void, sendMessage : (msg: string) => void} ) => {
     const inputRef = useRef<HTMLTextAreaElement>(null)
     
-    return <div>
-    <textarea
+    return <div className = "sticky fixed absolute z-10">
+    <textarea className = "object-center object-bottom"
         ref = {inputRef}
         onChange={(e) => {
             setMsg(e.target.value)

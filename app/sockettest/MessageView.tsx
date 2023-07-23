@@ -1,6 +1,6 @@
-const MessageView = ({ msgs } : { msgs : string[]}) => {
 
-    return <div>
+const MessageView = ({ msgs } : { msgs : string[]}) => {
+    return <div className = "h-screen flex-col-reverse" style = {{display:'flex',overflowY:'auto'}}>
         <ul>
         {msgs.map((msg : string) => {
             return <><li>
