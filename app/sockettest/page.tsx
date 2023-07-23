@@ -36,10 +36,12 @@ const Home = () => {
       })
     }
   
-    return <main>
-        <MessageView msgs={messages}></MessageView>
-        <MessageInput msg={msg} setMsg={setMsg} sendMessage={sendMessage}></MessageInput>
-    </main>
+    return (<main style = {{overflow:'hidden',position:'relative'}}>
+        <div>
+          <MessageView msgs={messages}></MessageView>
+          <MessageInput msg={msg} setMsg={setMsg} sendMessage={sendMessage}></MessageInput>
+        </div>
+    </main>)
   }
   
   export default Home;
