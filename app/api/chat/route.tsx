@@ -26,7 +26,7 @@ export async function GET(req : NextRequest) {
             content: true
         },
         orderBy: {
-            id: 'desc'
+            id: 'asc'
         }
     })
     
