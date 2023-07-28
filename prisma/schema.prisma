@@ -42,6 +42,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  messages      Message[]
+  channels      ChatChannel[]
 }
 
 model VerificationToken {
@@ -50,4 +52,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model ChatChannel {
+  id String @id @default(cuid())
+  users User[]
+  messsages Message[]
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  content String 
+
+  author User @relation(fields: [authorId], references: [id])
+  authorId String
+
+  channel ChatChannel @relation(fields: [channelId], references: [id])
+  channelId String
 }
