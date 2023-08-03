@@ -24,6 +24,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -32,6 +33,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -43,7 +46,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
   messages      Message[]
-  channels      ChatChannel[]
+  channels      ChatChannel[] @relation(name: "users_in_channel")
+
+  ownedChannels ChatChannel[] @relation(name: "owner_to_channel")
 }
 
 model VerificationToken {
@@ -56,8 +61,16 @@ model VerificationToken {
 
 model ChatChannel {
   id String @id @default(cuid())
-  users User[]
+  name String
+  image String?
+
+  users User[] @relation(name: "users_in_channel")
   messsages Message[]
+
+  owner User @relation(fields: [ownerId], references: [id], name: "owner_to_channel")
+  ownerId String
+
+  @@index([ownerId])
 }
 
 model Message {
@@ -69,4 +82,7 @@ model Message {
 
   channel ChatChannel @relation(fields: [channelId], references: [id])
   channelId String
+
+  @@index([channelId])
+  @@index([authorId])
 }
