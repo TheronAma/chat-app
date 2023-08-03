@@ -35,18 +35,20 @@ export async function GET(req : NextRequest) {
 }
 
 export async function POST(req : NextRequest) {
-    const session = await getServerSession()
+    const session = await getServerSession().catch(err => console.log(err))
     const email = session?.user?.email ? session?.user?.email : ''
+    const data = await req.json().catch(err => console.log(err))
+
+    const emails = data.emails
 
     const result = 
     await prisma.chatChannel.create({
         data: {
             users: {
-                connect: {email: email}
+                connect: [{email: email}, ...(emails.map((e : string) => {email: e}))]
             }
         }
-    })
-
+    }).catch(err => console.log(err))
     return NextResponse.json({ channels : result })
 }
 
