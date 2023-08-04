@@ -7,46 +7,55 @@ import { options } from '../auth/[...nextauth]/options'
 const prisma = new PrismaClient()
 
 export async function GET(req : NextRequest) {
-    const session = await getServerSession()
-    const email = session?.user?.email ? session?.user?.email : ''
-    const user = await prisma.user.findUnique({
-        where: {
-            email: email
-        }
+    const session = await getServerSession(options).catch(err => console.log(err))
+    .catch((err) => {
+        console.log(err)
     })
+    
 
-    const { searchParams } = new URL (req.url)
-
-    const result = email == '' ? await prisma.chatChannel.findMany() : 
-    await prisma.chatChannel.findMany({
-        include: {
-            users: true
-        },
+    const res = await prisma.chatChannel.findMany({
         where: {
             users: {
-                some: {
-                    id: user?.id
+                some: 
+                {
+                    id: session?.user?.id
                 }
             }
         }
-    })
+    }).catch(err => console.log(err))
 
-    return NextResponse.json({ channels : result })
+    return NextResponse.json({ channels : res })
 }
 
 export async function POST(req : NextRequest) {
-    const session = await getServerSession()
-    const email = session?.user?.email ? session?.user?.email : ''
+    const session = await getServerSession(options).catch(err => console.log(err))
+    // expect data to be - 
+    const data = await req.json().catch(err => console.log(err))
+    const userIds = data.userIds
+    const image = data.image
 
-    const result = 
-    await prisma.chatChannel.create({
-        data: {
-            users: {
-                connect: {email: email}
+    console.log(session?.user)
+
+    if (!session?.user) {
+        return NextResponse.json({success: false, channel: {}})
+    }
+
+    if (session.user?.id) {
+        console.log([{id : session?.user.id}, ...(userIds.map((userId : string) => {return {id: userId}}))])
+        const result = 
+        await prisma.chatChannel.create({
+            data: {
+                users: {
+                    connect: [{id : session?.user.id}, ...(userIds.map((userId : string) => {return {id: userId}}))]
+                },
+                name: data.name,
+                image: data.image,
+                owner: {
+                    connect: {id: session.user.id}
+                }
             }
-        }
-    })
-
-    return NextResponse.json({ channels : result })
+        }).catch(err => console.log(err))
+        return NextResponse.json({ success: true, channel: result})
+    }
+    return NextResponse.json({success: false, channel: {}})
 }
-
