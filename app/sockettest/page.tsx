@@ -7,7 +7,7 @@ import MessageInput from './MessageInput'
 
 let socket : any
 
-const Home = () => {
+const Home = () => {  
     const [messages, setMessages] = useState<string[]>([])
     const [msg, setMsg] = useState<string>("")
 
