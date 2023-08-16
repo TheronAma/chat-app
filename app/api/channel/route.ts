@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Prisma, User, ChatChannel } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { options } from '../auth/[...nextauth]/options'
 
@@ -11,9 +11,8 @@ export async function GET(req : NextRequest) {
     .catch((err) => {
         console.log(err)
     })
-    
 
-    const res = await prisma.chatChannel.findMany({
+    const res : ChatChannel[] = await prisma.chatChannel.findMany({
         where: {
             users: {
                 some: 
@@ -22,7 +21,10 @@ export async function GET(req : NextRequest) {
                 }
             }
         }
-    }).catch(err => console.log(err))
+    }).catch((err) => {
+        console.log(err)
+        return []
+    })
 
     return NextResponse.json({ channels : res })
 }
@@ -54,7 +56,9 @@ export async function POST(req : NextRequest) {
                     connect: {id: session.user.id}
                 }
             }
-        }).catch(err => console.log(err))
+        }).catch(err => {
+            console.log(err)
+        })
         return NextResponse.json({ success: true, channel: result})
     }
     return NextResponse.json({success: false, channel: {}})

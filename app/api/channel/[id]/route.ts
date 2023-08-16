@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Prisma, Message, ChatChannel } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { options } from '../../auth/[...nextauth]/options'
 
@@ -8,18 +8,28 @@ const prisma = new PrismaClient()
 
 export async function GET(req : NextRequest, { params } : { params: { id : string } }) {
     const session = await getServerSession(options).catch(console.log)
-    const messages = await prisma.message.findMany({
+    const channel = (await prisma.chatChannel.findUnique({
         where: {
-            channelId: params.id
+            id: params.id
         },
-        orderBy: {
-            id: 'desc'
+        include: {
+            users: true,
+            messages: {
+                include: {
+                    author: true
+                },
+                orderBy: {
+                    id: 'desc'
+                }
+            },
         }
-    }).catch(console.log)
-    return NextResponse.json(messages)
+    })
+    .catch(console.log)) 
+    return NextResponse.json(channel)
 }
 
 export async function POST(req : NextRequest, { params } : { params: { id : string } }) {
+    console.log("RECEIVED POST TO " + params.id)
     const session = await getServerSession(options).catch(console.log)
     const data = await req.json().catch(console.log)
     const message = prisma.message.create({
