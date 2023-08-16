@@ -4,6 +4,7 @@ import { Server as SockServer } from "Socket.IO";
 import { Server as HTTPServer } from "https";
 
 import { Server } from 'Socket.IO'
+import { ChatChannel, User } from '@prisma/client';
 
 const SocketHandler = (req : NextApiRequest, res : NextApiResponseServerIO) => {
   if (res.socket.server.io) {
@@ -17,10 +18,15 @@ const SocketHandler = (req : NextApiRequest, res : NextApiResponseServerIO) => {
     res.socket.server.io = io
     io.on('connection', (socket) => {
         // socket.emit('message', 'world!')
-        socket.on('message', function (msg : string) {
-            console.log("received msg: " + msg)
-            io.emit('message', msg)
+        socket.on('message', ({ channel , author, content } : 
+        { channel : ChatChannel, author : User , content : string}) => {
+          io.to(channel.id).emit('message', { author , content })
         }) 
+
+        socket.on('channel', (id : string) => { 
+          console.log("received channel: " + id) 
+          socket.join(id)
+        })
     })
   }
   res.end()

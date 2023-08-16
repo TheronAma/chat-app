@@ -65,7 +65,7 @@ model ChatChannel {
   image String?
 
   users User[] @relation(name: "users_in_channel")
-  messsages Message[]
+  messages Message[]
 
   owner User @relation(fields: [ownerId], references: [id], name: "owner_to_channel")
   ownerId String
