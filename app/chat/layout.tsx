@@ -6,5 +6,6 @@ export default function ChatLayout(
     return <main className="h-screen flex justify-start">
         <Sidebar />
         {children}
+        
     </main>
 }

@@ -13,14 +13,6 @@ export async function GET(req : NextRequest) {
     })
 
     const res : ChatChannel[] = await prisma.chatChannel.findMany({
-        where: {
-            users: {
-                some: 
-                {
-                    id: session?.user?.id
-                }
-            }
-        }
     }).catch((err) => {
         console.log(err)
         return []
