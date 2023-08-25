@@ -20,11 +20,11 @@ function ChatMessage(
     
     const pfp = ((message.author.image != null) ? (message.author.image) : "./fist.png")
 
-    return <div style = {{padding:"1vh"}} className = {`flex ${styles.messageStyle}`}>
-                <img style = {{marginRight:"1vh",width:"30px",height:"30px"}}className = "rounded-full" src = {pfp}/> 
-                <div> 
-                    <div> <b>{message.author.name}: </b></div>
-                    <div style = {{maxWidth:"90%",overflowWrap: "break-word"}}> <p> {message.content} </p> </div>
+    return <div style = {{overflowWrap: "break-word",padding:"2vh"}} className = {`flex ${styles.messageStyle}`}>
+                <img style = {{marginRight:"1vh",width:"50px",height:"50px"}}className = "rounded-full" src = {pfp}/> 
+                <div style = {{maxWidth:"90%",wordBreak:"break-all"}}> 
+                    <b>{message.author.name}: </b>
+                    <p> {message.content} </p>
                 </div>   
             </div>
 }
@@ -118,7 +118,7 @@ export default function ChatView(
     }
 
     return <div className="flex flex-auto flex-col justify-start" style = {{background:"#282C34", color:"white"}}>
-        <div className="flex flex-auto flex-col-reverse overflow-y-scroll">
+        <div className="flex flex-auto flex-col-reverse overflow-y-scroll overflow-x-hidden">
             {chatMessages.map((message) => {
                 return <ChatMessage message={message}></ChatMessage>
             })}
@@ -140,7 +140,7 @@ export default function ChatView(
                 <div></div>
             </div>
             <div style = {{display:"flex"}} className = {`${styles.textComponent}`}>
-                    <img src = "./fist.png" style = {{width:"50px",height:"50px"}} 
+                    <img src = "./Doodle.png" style = {{width:"50px",height:"50px"}} 
                     onClick={() => {
                         sendChatMessage(currentMessage)
                         setCurrentMessage('')
