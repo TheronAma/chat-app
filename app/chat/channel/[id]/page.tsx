@@ -1,5 +1,4 @@
 import ChatView from "./ChatView"
-import MemberSidebar from "./MemberSidebar"
 
 export default async function ChatChannel(
     { params } : { params : { id : string } }
@@ -10,6 +9,5 @@ export default async function ChatChannel(
 
     return <div className="flex flex-auto justify-start">
         <ChatView channel={channel} messages={messages}></ChatView>
-        <MemberSidebar users={users}></MemberSidebar>
     </div>
 }

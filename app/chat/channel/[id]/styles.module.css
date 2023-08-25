@@ -1,0 +1,25 @@
+.messageStyle {
+    font-size: 2vh;
+    margin-bottom:2px;
+}
+.messageStyle:hover{
+    background-color: #252931;
+}
+
+.textArea { 
+    line-height:1em;
+    padding:1em 0.5em;
+    scrollbar-width: none;
+}
+.textArea::-webkit-scrollbar {
+    display: none;
+}
+
+.textComponent {
+    padding:0.5em;
+    padding-bottom:2em;
+    padding-right:1em;
+}
+.container {
+    display:flex;
+}
