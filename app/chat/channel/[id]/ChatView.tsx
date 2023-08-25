@@ -22,7 +22,7 @@ function ChatMessage(
     return <div style = {{padding:"1vh"}} className = {`flex ${styles.messageStyle}`}>
                 <img style = {{marginRight:"1vh",width:"30px",height:"30px"}}className = "rounded-full" src = {pfp}/> 
                 <div> 
-                    <div style = {{maxWidth:"50%"}}> <b>{message.author.name}: </b></div>
+                    <div> <b>{message.author.name}: </b></div>
                     <div style = {{maxWidth:"90%",overflowWrap: "break-word"}}> <p> {message.content} </p> </div>
                 </div>   
             </div>
