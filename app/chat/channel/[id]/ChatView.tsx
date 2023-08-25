@@ -16,6 +16,7 @@ function ChatMessage(
         simple font changes
         rescaling size?
     */
+    /*adsdsa*/
     
     const pfp = ((message.author.image != null) ? (message.author.image) : "./fist.png")
 
